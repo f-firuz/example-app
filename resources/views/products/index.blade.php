@@ -41,17 +41,25 @@
                             <form action="{{ route('products.destroy', $rs->id) }}" method="POST" type="button" class="btn btn-danger p-0" onsubmit="return confirm('Вы уверены, что хотите удалить ?')">
                                 @csrf
                                 @method('DELETE')
-                                <button class="btn btn-danger m-0">Удвлить</button>
+                                <button class="btn btn-danger m-0">Удалить</button>
                             </form>
                         </div>
                     </td>
+
                 </tr>
             @endforeach
+            <tr>
+
+                <td class="text-right" colspan="6"> Количество товаров: {{$rs->count()}}</td>
+
+
+            </tr>
         @else
             <tr>
                 <td class="text-center" colspan="6">Товар не найден</td>
             </tr>
         @endif
+
         </tbody>
     </table>
 @endsection

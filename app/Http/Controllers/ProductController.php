@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Product;
+use Illuminate\Support\Facades\Auth;
 
 class ProductController extends Controller
 {
@@ -12,10 +13,13 @@ class ProductController extends Controller
      */
     public function index()
     {
-        $product = Product::orderBy('created_at', 'DESC')->get();
+
+        $product = Product::where('user_id', Auth::user()->id)->get();
 
         return view('products.index', compact('product'));
+
     }
+
 
     /**
      * Show the form for creating a new resource.
@@ -30,10 +34,25 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
-        Product::create($request->all());
+//        Product::create($request->all());
 
-        return redirect()->route('products')->with('success', 'Product added successfully');
+        Product::create([
+            'title' => request('title'),
+            'user_id' => auth()->id(),
+            'price' => request('price'),
+            'product_code' => request('product_code'),
+            'description' => request('description'),
+            'updated_at`' => request('updated_at`'),
+            'created_at' => request('created_at'),
+        ]);
+
+        return redirect()->route('products')->with('success', 'Продукт успешно добавлен');
     }
+
+
+
+
+
 
     /**
      * Display the specified resource.
@@ -64,7 +83,7 @@ class ProductController extends Controller
 
         $product->update($request->all());
 
-        return redirect()->route('products')->with('success', 'product updated successfully');
+        return redirect()->route('products')->with('success', 'Продукт успешно обновлен');
     }
 
     /**
@@ -76,6 +95,6 @@ class ProductController extends Controller
 
         $product->delete();
 
-        return redirect()->route('products')->with('success', 'product deleted successfully');
+        return redirect()->route('products')->with('success', 'Продукт успешно удален');
     }
 }
